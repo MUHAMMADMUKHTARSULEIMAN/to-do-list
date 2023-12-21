@@ -14,10 +14,12 @@ function taskReducer(draft, action) {
         text: action.text,
         done: false
       });
+      break;
     }
     case "done": {
       const toggle = draft.find(t => t.id === action.id)
-      toggle.done = !toggle.done
+      toggle.done = !toggle.done;
+      break;
     }
     case "delete": {
       return draft.filter(t => t.id !== action.id);
@@ -41,16 +43,38 @@ function App() {
     })
   };
 
-  const toggleDone = (done) => {
+  const toggleDone = taskId => {
     dispatch({
       type: "done",
       id: taskId
     })
+  };
+
+  const handleDeleteTask = taskId => {
+    dispatch({
+      type: "delete",
+      id: taskId
+    })
   }
 
+  const mappedTasks = tasks.map(task => {
+    return (
+      <Task
+      id={task.id}
+      text={task.text}
+      toggleDone={toggleDone}
+      handleDeleteTask={handleDeleteTask}
+      />
+    )
+  })
   return (
-    <div className="App">
-      
+    <div id="App">
+      <AddTask
+      handleAddTask={handleAddTask}
+      />
+      <div>
+        {mappedTasks}
+      </div>
     </div>
   );
 }
