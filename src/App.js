@@ -13,13 +13,19 @@ function taskReducer(draft, action) {
       draft.push({
         id: action.id,
         text: action.text,
-        done: false
+        done: false,
+        edit: false
       });
       break;
     }
     case "done": {
       const toggle = draft.find(t => t.id === action.id)
       toggle.done = !toggle.done;
+      break;
+    }
+    case "edit": {
+      const toggle = draft.find(t => t.id === action.id)
+      toggle.edit = !toggle.edit;
       break;
     }
     case "delete": {
@@ -76,7 +82,14 @@ function App() {
     dispatch({
       type: "delete",
       id: taskId
-    })
+    });
+  };
+
+  const editTask = (taskId) => {
+    dispatch({
+      type: "edit",
+      id: taskId
+    });
   }
 
   const mappedTasks = tasks.map(task => {
@@ -84,6 +97,7 @@ function App() {
       <Task
       taskId={task.id}
       text={task.text}
+      editTask={editTask}
       toggleDone={toggleDone}
       deleteTask={deleteTask}
       />
