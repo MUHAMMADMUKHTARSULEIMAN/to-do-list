@@ -17,22 +17,31 @@ function PendingTask(props) {
 
   return (
     <div>
-      {!props.edit ? 
-      <p>{form.editText}</p> :
-      <input name="editText" id="editText" type="text" value={form.editText} onChange={handleChange}/>
+      {!props.edit ?
+      <div><p>{form.editText}</p></div> :
+      <div><input name="editText" id="editText" type="text" value={form.editText} onChange={handleChange}/></div>
       }
 
+      <div>
+        {props.done ?
+        "" :
+        <button onClick={() => {props.editTask(props.taskId)}}>{props.edit ? "Save" : "Edit"}</button>
+        }
+        {props.edit ?
+        "" :
+          <button onClick={() => {props.deleteTask(props.taskId)}}>Delete</button>
+        }
+        {props.edit ?
+        "" :
+          <button onClick={() => {props.toggleDone(props.taskId)}}>{props.done ? "Resume" : "Done"}</button>
+        }
+      </div>
+
       {props.done ?
-      "" :
-      <button onClick={() => {props.editTask(props.taskId)}}>{props.edit ? "Save" : "Edit"}</button>
-      }
-      {props.edit ?
-      "" :
-        <button onClick={() => {props.deleteTask(props.taskId)}}>Delete</button>
-      }
-      {props.edit ?
-      "" :
-        <button onClick={() => {props.toggleDone(props.taskId)}}>{props.done ? "Resume" : "Done"}</button>
+      <div>
+        <h3>Completed</h3>
+      </div> :
+      ""
       }
     </div>
   );
