@@ -1,7 +1,8 @@
 import {useState} from "react";
 import {useImmerReducer} from "use-immer";
 import AddTask from "./components/AddTask";
-import Task from "./components/Task";
+import PendingTask from "./components/PendingTask";
+// import CompletedTask from "./components/CompletedTask";
 
 let setId = 0;
 const initialTasks = [];
@@ -42,7 +43,6 @@ function App() {
 
   const [form, setForm] = useState({
     text: "",
-    editText: ""
   });
 
   const handleChange = (e) => {
@@ -56,7 +56,7 @@ function App() {
     });
   };
 
-  const addTask = (e, text) => {
+  const addTask = (e) => {
     e.preventDefault();
 
     dispatch({
@@ -67,7 +67,8 @@ function App() {
 
     setForm(prevForm => {
       return {
-        text: ""
+        ...prevForm,
+        text: "",
       };
     });
   };
@@ -80,10 +81,14 @@ function App() {
   };
 
   const deleteTask = taskId => {
-    dispatch({
-      type: "delete",
-      id: taskId
-    });
+    const answer = window.confirm('Do you want to proceed with this action?');
+    if (answer) {
+      dispatch({
+        type: "delete",
+        id: taskId
+      });
+    }
+
   };
 
   const editTask = (taskId) => {
@@ -91,21 +96,38 @@ function App() {
       type: "edit",
       id: taskId
     });
-  }
+  };
 
-  const mappedTasks = tasks.map(task => {
+  const pendingTasks = tasks.map(task => {
     return (
-      <Task
+      <PendingTask
       taskId={task.id}
       text={task.text}
-      edit={task.edit}
       done={task.done}
+      edit={task.edit}
       editTask={editTask}
       toggleDone={toggleDone}
       deleteTask={deleteTask}
       />
-    )
-  })
+    );
+  });
+
+  // const completedTasks = tasks.filter(t => t.done).map(task => {
+  //   return (
+  //     <CompletedTask
+  //     taskId={task.id}
+  //     text={task.text}
+  //     editText={form.editText}
+  //     edit={task.edit}
+  //     done={task.done}
+  //     editTask={editTask}
+  //     toggleDone={toggleDone}
+  //     deleteTask={deleteTask}
+  //     handleChange={handleChange}
+  //     />
+  //   );
+  // });
+
   return (
     <div id="App">
       <AddTask
@@ -113,8 +135,9 @@ function App() {
       handleChange={handleChange}
       addTask={addTask}
       />
+
       <div>
-        {mappedTasks}
+        {pendingTasks}
       </div>
     </div>
   );
