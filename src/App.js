@@ -41,7 +41,8 @@ function App() {
   const [tasks, dispatch] = useImmerReducer(taskReducer, initialTasks);
 
   const [form, setForm] = useState({
-    text: ""
+    text: "",
+    editText: ""
   });
 
   const handleChange = (e) => {
