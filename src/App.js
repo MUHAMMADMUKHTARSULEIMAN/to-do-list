@@ -11,17 +11,17 @@ function taskReducer(draft, action) {
   switch(action.type) {
     case "create": {
       draft.push({
-        taskId: action.id,
+        id: action.id,
         text: action.text,
         done: false
       });
       break;
     }
-    // case "done": {
-    //   const toggle = draft.find(t => t.id === action.id)
-    //   toggle.done = !toggle.done;
-    //   break;
-    // }
+    case "done": {
+      const toggle = draft.find(t => t.id === action.id)
+      toggle.done = !toggle.done;
+      break;
+    }
     case "delete": {
       return draft.filter(t => t.id !== action.id);
     }
@@ -63,16 +63,14 @@ function App() {
         text: ""
       };
     });
-
-    // taskId++;
   };
 
-  // const toggleDone = taskId => {
-  //   dispatch({
-  //     type: "done",
-  //     id: taskId
-  //   })
-  // };
+  const toggleDone = taskId => {
+    dispatch({
+      type: "done",
+      id: taskId
+    })
+  };
 
   const deleteTask = taskId => {
     dispatch({
@@ -86,8 +84,7 @@ function App() {
       <Task
       taskId={task.id}
       text={task.text}
-      done={task.done}
-      // toggleDone={toggleDone}
+      toggleDone={toggleDone}
       deleteTask={deleteTask}
       />
     )
