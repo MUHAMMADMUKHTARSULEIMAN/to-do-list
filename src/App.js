@@ -1,8 +1,9 @@
+import {useState} from "react";
 import {useImmerReducer} from "use-immer";
 import AddTask from "./components/AddTask";
 import Task from "./components/Task";
 
-let taskId = 0;
+let setId = 0;
 const initialTasks = [];
 
 
@@ -10,17 +11,17 @@ function taskReducer(draft, action) {
   switch(action.type) {
     case "create": {
       draft.push({
-        id: action.id,
+        taskId: action.id,
         text: action.text,
         done: false
       });
       break;
     }
-    case "done": {
-      const toggle = draft.find(t => t.id === action.id)
-      toggle.done = !toggle.done;
-      break;
-    }
+    // case "done": {
+    //   const toggle = draft.find(t => t.id === action.id)
+    //   toggle.done = !toggle.done;
+    //   break;
+    // }
     case "delete": {
       return draft.filter(t => t.id !== action.id);
     }
@@ -33,24 +34,47 @@ function taskReducer(draft, action) {
 function App() {
   const [tasks, dispatch] = useImmerReducer(taskReducer, initialTasks);
 
-  const handleAddTask = text => {
-    taskId++;
+  const [form, setForm] = useState({
+    text: ""
+  });
 
-    dispatch({
-      type: "added",
-      id: taskId,
-      text: text
-    })
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+
+    setForm(prevForm => {
+      return {
+        ...prevForm,
+        [name]: value
+      };
+    });
   };
 
-  const toggleDone = taskId => {
+  const addTask = (e, text) => {
+    e.preventDefault();
+
     dispatch({
-      type: "done",
-      id: taskId
-    })
+      type: "create",
+      id: setId++,
+      text: form.text
+    });
+
+    setForm(prevForm => {
+      return {
+        text: ""
+      };
+    });
+
+    // taskId++;
   };
 
-  const handleDeleteTask = taskId => {
+  // const toggleDone = taskId => {
+  //   dispatch({
+  //     type: "done",
+  //     id: taskId
+  //   })
+  // };
+
+  const deleteTask = taskId => {
     dispatch({
       type: "delete",
       id: taskId
@@ -60,17 +84,20 @@ function App() {
   const mappedTasks = tasks.map(task => {
     return (
       <Task
-      id={task.id}
+      taskId={task.id}
       text={task.text}
-      toggleDone={toggleDone}
-      handleDeleteTask={handleDeleteTask}
+      done={task.done}
+      // toggleDone={toggleDone}
+      deleteTask={deleteTask}
       />
     )
   })
   return (
     <div id="App">
       <AddTask
-      handleAddTask={handleAddTask}
+      text={form.text}
+      handleChange={handleChange}
+      addTask={addTask}
       />
       <div>
         {mappedTasks}
