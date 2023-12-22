@@ -97,6 +97,8 @@ function App() {
       <Task
       taskId={task.id}
       text={task.text}
+      edit={task.edit}
+      done={task.done}
       editTask={editTask}
       toggleDone={toggleDone}
       deleteTask={deleteTask}
