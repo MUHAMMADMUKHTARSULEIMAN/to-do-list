@@ -38,6 +38,26 @@ function taskReducer(draft, action) {
   }
 };
 
+// const initialTextForm = {
+//   text: ""
+// };
+
+
+
+// function formReducer(textForm, action) {
+//   switch(action.type) {
+//     case "handle text input": {
+//       return ({
+//                 ...textForm,
+//         [action.field]: action.payload
+//       });
+//     }
+//     default: {
+//       throw Error(`Unknown action: ${action.type}`)
+//     }
+//   }
+// };
+
 function App() {
   const [tasks, dispatch] = useImmerReducer(taskReducer, initialTasks);
 
@@ -56,6 +76,21 @@ function App() {
     });
   };
 
+  // const [editForm, setEditForm] = useState({
+  //   editText: form.text
+  // });
+
+  // const handleEditChange = (e) => {
+  //   const {name, value} = e.target;
+
+  //   setEditForm(prevForm => {
+  //     return {
+  //       ...prevForm,
+  //       [name]: value
+  //     };
+  //   });
+  // };
+
   const addTask = (e) => {
     e.preventDefault();
 
@@ -73,22 +108,21 @@ function App() {
     });
   };
 
-  const toggleDone = taskId => {
+  const toggleDone = (taskId) => {
     dispatch({
       type: "done",
       id: taskId
-    })
+    });
   };
 
-  const deleteTask = taskId => {
+  const deleteTask = (taskId) => {
     const answer = window.confirm('Do you want to proceed with this action?');
-    if (answer) {
+    if(answer) {
       dispatch({
         type: "delete",
         id: taskId
       });
-    }
-
+    };
   };
 
   const editTask = (taskId) => {
@@ -98,7 +132,22 @@ function App() {
     });
   };
 
-  const pendingTasks = tasks.map(task => {
+  const allTasks = tasks.map(task => {
+    return (
+      <PendingTask
+      key={task.id}
+      taskId={task.id}
+      text={task.text}
+      done={task.done}
+      edit={task.edit}
+      editTask={editTask}
+      toggleDone={toggleDone}
+      deleteTask={deleteTask}
+      />
+    );
+  });
+
+  const pendingTasks = tasks.filter(t => !t.done).map(task => {
     return (
       <PendingTask
       taskId={task.id}
@@ -112,21 +161,19 @@ function App() {
     );
   });
 
-  // const completedTasks = tasks.filter(t => t.done).map(task => {
-  //   return (
-  //     <CompletedTask
-  //     taskId={task.id}
-  //     text={task.text}
-  //     editText={form.editText}
-  //     edit={task.edit}
-  //     done={task.done}
-  //     editTask={editTask}
-  //     toggleDone={toggleDone}
-  //     deleteTask={deleteTask}
-  //     handleChange={handleChange}
-  //     />
-  //   );
-  // });
+  const completedTasks = tasks.filter(t => t.done).map(task => {
+    return (
+      <PendingTask
+      taskId={task.id}
+      text={task.text}
+      done={task.done}
+      edit={task.edit}
+      editTask={editTask}
+      toggleDone={toggleDone}
+      deleteTask={deleteTask}
+      />
+    );
+  });
 
   return (
     <div id="App">
@@ -137,7 +184,17 @@ function App() {
       />
 
       <div>
+        {allTasks}
+      </div>
+
+      <div>
+        <h1>Pending</h1>
         {pendingTasks}
+      </div>
+
+      <div>
+        <h1>Completed</h1>
+        {completedTasks}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 function PendingTask(props) {
   const [form, setForm] = useState({
     editText: props.text
@@ -17,6 +18,7 @@ function PendingTask(props) {
 
   return (
     <div>
+      <p>{props.taskId}</p>
       {!props.edit ?
       <div><p>{form.editText}</p></div> :
       <div><input name="editText" id="editText" type="text" value={form.editText} onChange={handleChange}/></div>
