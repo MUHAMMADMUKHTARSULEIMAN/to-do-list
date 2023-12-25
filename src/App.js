@@ -38,31 +38,13 @@ function taskReducer(draft, action) {
   }
 };
 
-// const initialTextForm = {
-//   text: ""
-// };
-
-
-
-// function formReducer(textForm, action) {
-//   switch(action.type) {
-//     case "handle text input": {
-//       return ({
-//                 ...textForm,
-//         [action.field]: action.payload
-//       });
-//     }
-//     default: {
-//       throw Error(`Unknown action: ${action.type}`)
-//     }
-//   }
-// };
+  
 
 function App() {
   const [tasks, dispatch] = useImmerReducer(taskReducer, initialTasks);
 
   const [form, setForm] = useState({
-    text: "",
+    text: ""
   });
 
   const handleChange = (e) => {
@@ -76,20 +58,20 @@ function App() {
     });
   };
 
-  // const [editForm, setEditForm] = useState({
-  //   editText: form.text
-  // });
+  const [editForm, setEditForm] = useState({
+    editText: ""
+  });
 
-  // const handleEditChange = (e) => {
-  //   const {name, value} = e.target;
+  const handleEditChange = (e) => {
+    const {name, value} = e.target;
 
-  //   setEditForm(prevForm => {
-  //     return {
-  //       ...prevForm,
-  //       [name]: value
-  //     };
-  //   });
-  // };
+    setEditForm(prevForm => {
+      return {
+        ...prevForm,
+        [name]: value
+      };
+    });
+  };
 
   const addTask = (e) => {
     e.preventDefault();
@@ -133,6 +115,28 @@ function App() {
   };
 
   const allTasks = tasks.map(task => {
+    setEditForm(prevForm => {
+      return {
+        ...prevForm,
+        editText: task.text
+      }
+    });
+    return (
+      <PendingTask
+      key={task.id}
+      taskId={task.id}
+      editText={editForm.editText}
+      done={task.done}
+      edit={task.edit}
+      handleEditChange={handleEditChange}
+      editTask={editTask}
+      toggleDone={toggleDone}
+      deleteTask={deleteTask}
+      />
+    );
+  });
+
+  const pendingTasks = tasks.map(task => {
     return (
       <PendingTask
       key={task.id}
@@ -147,23 +151,10 @@ function App() {
     );
   });
 
-  const pendingTasks = tasks.filter(t => !t.done).map(task => {
+  const completedTasks = tasks.map(task => {
     return (
       <PendingTask
-      taskId={task.id}
-      text={task.text}
-      done={task.done}
-      edit={task.edit}
-      editTask={editTask}
-      toggleDone={toggleDone}
-      deleteTask={deleteTask}
-      />
-    );
-  });
-
-  const completedTasks = tasks.filter(t => t.done).map(task => {
-    return (
-      <PendingTask
+      key={task.id}
       taskId={task.id}
       text={task.text}
       done={task.done}

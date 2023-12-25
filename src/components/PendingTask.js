@@ -1,27 +1,25 @@
-import { useState } from "react";
-
 function PendingTask(props) {
-  const [form, setForm] = useState({
-    editText: props.text
-  });
+  // const [form, setForm] = useState({
+  //   editText: props.editText
+  // });
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
+  // const handleChange = (e) => {
+  //   const {name, value} = e.target;
 
-    setForm(prevForm => {
-      return {
-        ...prevForm,
-        [name]: value
-      }
-    })
-  };
+  //   setForm(prevForm => {
+  //     return {
+  //       ...prevForm,
+  //       [name]: value
+  //     }
+  //   })
+  // };
 
   return (
     <div>
       <p>{props.taskId}</p>
       {!props.edit ?
-      <div><p>{form.editText}</p></div> :
-      <div><input name="editText" id="editText" type="text" value={form.editText} onChange={handleChange}/></div>
+      <div><p>{props.editText}</p></div> :
+      <div><input name="editText" id="editText" type="text" value={props.editText} onChange={props.handleEditChange}/></div>
       }
 
       <div>
