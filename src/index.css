@@ -125,3 +125,7 @@ p {
 #completed {
   font-weight: 600;
 }
+
+hr {
+  color: black;
+}
