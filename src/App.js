@@ -14,7 +14,8 @@ function taskReducer(draft, action) {
         id: action.id,
         text: action.text,
         done: false,
-        edit: false
+        edit: false,
+        date: new Date().toLocaleString()
       });
       break;
     }
@@ -121,6 +122,7 @@ function App() {
       text={task.text}
       done={task.done}
       edit={task.edit}
+      date={task.date}
       editTask={editTask}
       toggleDone={toggleDone}
       deleteTask={deleteTask}

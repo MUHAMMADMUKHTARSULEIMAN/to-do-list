@@ -17,34 +17,40 @@ function PendingTask(props) {
   };
 
   return (
-    <div id="task-container">
-      {!props.edit ?
-      <div id="text-container"><p>{form.editText}</p></div> :
-      <div id="input-container"><input name="editText" id="edit-text" type="text" value={form.editText} onChange={handleChange}/></div>
-      }
-
-      <div id="buttons-container">
-        {props.done ?
-        "" :
-        <button className="task-button" onClick={() => {props.editTask(props.taskId)}}>{props.edit ? "Save" : "Edit"}</button>
+    <>
+      <div id="task-container">
+        {!props.edit ?
+        <div id="text-container"><p>{form.editText}</p></div> :
+        <div id="input-container"><input name="editText" id="edit-text" type="text" value={form.editText} onChange={handleChange}/></div>
         }
-        {props.edit ?
-        "" :
-          <button className="task-button" onClick={() => {props.deleteTask(props.taskId)}}>Delete</button>
-        }
-        {props.edit ?
-        "" :
-          <button className="task-button" onClick={() => {props.toggleDone(props.taskId)}}>{props.done ? "Resume" : "Done"}</button>
-        }
+        <br/>
+        <div id="buttons-container">
+          {props.done ?
+          "" :
+          <button className="task-button" onClick={() => {props.editTask(props.taskId)}}>{props.edit ? "Save" : "Edit"}</button>
+          }
+          {props.edit ?
+          "" :
+            <button className="task-button" onClick={() => {props.deleteTask(props.taskId)}}>Delete</button>
+          }
+          {props.edit ?
+          "" :
+            <button className="task-button" onClick={() => {props.toggleDone(props.taskId)}}>{props.done ? "Resume" : "Done"}</button>
+          }
+        </div>
+        <br/>
+        <div id="created-completed">
+          <p>Created: {props.date}</p>
+          {props.done ?
+          <div id="completed-indicator">
+            <p id="completed">Completed</p>
+          </div> :
+          ""
+          }        
+        </div>
       </div>
-
-      {props.done ?
-      <div id="completed-indicator">
-        <h3>Completed</h3>
-      </div> :
-      ""
-      }
-    </div>
+      <hr/>
+    </>
   );
 };
 
